@@ -1,5 +1,5 @@
 """
-Audio recorder module using sounddevice to capture microphone input with Silero VAD.
+Audio recorder module using sounddevice to capture microphone input.
 """
 
 import sys
@@ -19,16 +19,6 @@ def check_microphone() -> bool:
     except Exception as e:
         print(f"Error checking audio devices: {e}")
         return False
-
-def record_audio_vad(vad_detector=None, silence_duration: float = 1.0, tts_engine=None) -> np.ndarray:
-    """
-    Hands-free recording using Silero VAD. Automatically detects speech and silence.
-    """
-    if vad_detector is None:
-        from .vad import SileroVADDetector
-        vad_detector = SileroVADDetector()
-
-    return vad_detector.record_audio_vad(silence_duration=silence_duration, tts_engine=tts_engine)
 
 def record_audio_push_to_talk(sample_rate: int = SAMPLE_RATE) -> np.ndarray:
     """

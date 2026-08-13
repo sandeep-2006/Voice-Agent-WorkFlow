@@ -1,20 +1,13 @@
 # Voice-Agent-WorkFlow 🎙️🤖
 
-An end-to-end, real-time voice agent pipeline built with **Silero VAD**, **OpenAI Whisper**, **Groq LLM (Llama 3.3 70B)**, and **Kokoro TTS**.
+An end-to-end voice agent pipeline built with **OpenAI Whisper**, **Groq LLM (Llama 3.3 70B)**, and **Kokoro TTS**.
 
 ---
 
 ## ⚡ Architecture & Pipeline Flow
 
 ```
-🎤 Microphone Stream (16kHz)
-     │
-     ▼
-⚡ Silero VAD 6.2.1 (32ms Frame Analysis & Speech Boundary Detection)
-     │
-     ├── 1. Auto-Speech Trigger: Starts recording automatically when you speak.
-     ├── 2. Auto-Silence Cutoff: Stops recording after 1.0s of silence.
-     └── 3. Barge-In Interruption: Instantly silences Kokoro TTS if user speaks mid-response.
+🎤 Push-to-Talk Microphone / Audio File
      │
      ▼
 📝 OpenAI Whisper (Local Speech-to-Text with Apple Silicon MPS Acceleration)
@@ -30,8 +23,7 @@ An end-to-end, real-time voice agent pipeline built with **Silero VAD**, **OpenA
 
 ## ✨ Features
 
-- **Hands-Free Auto VAD**: Silero VAD auto-detects when speech starts and stops.
-- **Barge-In Interruption**: Start talking while the AI is speaking, and Kokoro TTS will instantly cut off and listen to your new question.
+- **Whisper Speech-to-Text**: Fast local transcription powered by PyTorch & Apple Silicon MPS.
 - **Ultra-Fast LLM Inference**: Powered by Groq's `llama-3.3-70b-versatile`.
 - **High-Quality Local Speech Synthesis**: Studio-quality voice generation using Kokoro TTS (`af_heart` voice).
 - **Multi-LLM Support**: Supports **Groq**, **OpenAI** (`gpt-4o-mini`), **Google Gemini** (`gemini-2.5-flash`), and **Ollama** (Local LLM).
@@ -55,7 +47,7 @@ cp .env.example .env
 Add your **Groq API key** in `.env`:
 ```env
 LLM_PROVIDER=groq
-GROQ_API_KEY=gsk_your_groq_api_key_here
+GROQ_API_KEY=your_groq_api_key_here
 ```
 *(Get a free API key at [console.groq.com](https://console.groq.com))*
 
@@ -67,29 +59,6 @@ uv sync
 ### 4. Run the Voice Agent
 ```bash
 uv run voice-agent2
-```
-
-Select Option `1` for **Hands-Free Auto VAD Mode** and start speaking naturally!
-
----
-
-## 🛠️ Project Structure
-
-```text
-voice-agent2/
-├── src/
-│   └── voice_agent2/
-│       ├── __init__.py
-│       ├── cli.py          # Interactive Terminal UI & Loop
-│       ├── recorder.py     # Microphone Audio Recorder
-│       ├── transcriber.py  # OpenAI Whisper Transcriber (STT)
-│       ├── llm.py          # LLM Integration (Groq, OpenAI, Gemini, Ollama)
-│       ├── tts.py          # Kokoro TTS Engine (Text-to-Speech)
-│       └── vad.py          # Silero VAD Speech & Interruption Detector
-├── tests/                  # Automated Test Suite
-├── pyproject.toml          # UV & Dependencies Configuration
-├── .env.example            # Environment Template
-└── README.md               # Project Documentation
 ```
 
 ---
